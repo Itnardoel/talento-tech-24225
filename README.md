@@ -1,2 +1,2 @@
-Este protecto es una página web básica desarrollada como parte de un curso de Front-End.
+Este proyecto es una página web básica desarrollada como parte de un curso de Front-End.
 La página está estructurada con HTML semántico y utiliza etiquestas `<header>`, `<main>`, y `<footer>` para organizar el contenido. El objectivo es aprender a crear la estructura básica de una página web y prepararla para futuras mejoras con CSS y JavaScript.
