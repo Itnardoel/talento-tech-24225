@@ -266,7 +266,6 @@ section > h2 {
 } 
 
 .contacto {
-  content-visibility: auto;
   display: flex;
   justify-content: space-evenly;
   align-items: center;
