@@ -332,7 +332,12 @@ footer {
     text-align: center;
   }
 
+  .productos {
+    justify-content: center;
+  }
+
   .producto {
+    max-width: 400px;
     align-items: center;
 
     & h2 {
@@ -346,6 +351,11 @@ footer {
 
   .reseñas {
     grid-template-columns: 1fr;
+    place-items: center;
+  }
+
+  .reseñas .card {
+    max-width: 420px;
   }
 
   .card p {
