@@ -82,6 +82,7 @@ header nav {
     font-size: 1.2em;
     list-style-type: none;
     justify-content: flex-end;
+    align-items: center;
     flex: 1;
     gap: 20px;
 
@@ -107,10 +108,33 @@ header nav {
   }
 }
 
+.cart {
+  position: relative;
+
+  & svg {
+    width: 45px;
+    height: auto;
+    z-index: 0;
+  }
+
+  & small {
+    font-size: smaller;
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 10;
+    background-color: #032523;
+    border-radius: 10px;
+  }
+}
+
 .mobile-menu {
-  width: 50px;
-  height: auto;
   display: none;
+
+  & svg {
+    width: 50px;
+    height: auto;
+  }
 }
 
 main p {
@@ -158,13 +182,18 @@ section > h2 {
   font-family: "Ubuntu", serif;
 }
 
-.productos {
+#productos {
   max-width: 1280px;
   margin: auto;
+}
+
+.productos {
   font-family: "Ubuntu", serif;
-  display: flex;
+  /* display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: space-between; */
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
   padding: 20px;
 
   & .producto {
@@ -177,15 +206,17 @@ section > h2 {
     border-radius: 20px;
     box-shadow: 2px 2px 2px 1px rgb(0 0 0 / 20%);
     transition: all 0.3s;
-    flex: 1 1 300px;
+    /* flex: 1 1 300px; */
 
     &:hover {
       transform: translateY(-5px);
     }
 
     & img {
-      width: 100%;
-      height: auto;
+      width: 321px;
+      height: 241px;
+      object-fit: contain;
+      align-self: center;
     }
 
     & h2 {
@@ -194,10 +225,15 @@ section > h2 {
 
     & h3 {
       color: rgb(0 0 0 / 60%);
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
     }
 
     & p {
       font-weight: 500;
+      margin-bottom: 4px;
     }
 
     & button {
@@ -210,6 +246,70 @@ section > h2 {
       &:hover {
         cursor: pointer;
       }
+    }
+  }
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  margin: 0;
+  padding: 0;
+  min-width: 100dvh;
+  z-index: 10;
+  background-color: rgb(0 0 0 / 50%);
+}
+
+.show-modal {
+  display: grid;
+  place-items: center;
+}
+
+#close-button {
+  cursor: pointer;
+  margin: 8px;
+  width: 30px;
+  height: auto;
+  place-self: end;
+}
+
+.modal-card {
+  display: grid;
+  width: 50%;
+  min-width: 400px;
+  background-color: #ffffff;
+  padding: 16px;
+
+  & img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    align-self: center;
+  }
+
+  & h2 {
+    text-wrap: balance;
+  }
+
+  & h3 {
+    color: rgb(0 0 0 / 60%);
+  }
+
+  & p {
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+
+  & button {
+    width: max-content;
+    background-color: #051a23;
+    color: #ffffff;
+    border-radius: 5px;
+    padding: 8px 16px;
+    
+    &:hover {
+      cursor: pointer;
     }
   }
 }
@@ -308,8 +408,6 @@ form {
   }
 }
 
-
-
 footer {
   font-family: "Ubuntu", serif;
   font-weight: 700;
@@ -320,8 +418,31 @@ footer {
 }
 
 @media (width <= 768px) {
+  nav {
+    position: relative;
+  }
+
   .mobile-menu {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    & a {
+      width: auto;
+    }
+  }
+
+  .mobile-menu-expand {
     display: block;
+    position: absolute;
+    top: 103px;
+    left: 0;
+    min-width: 100%;
+    background-color: #032523;
+  }
+
+  .hide {
+    display: none;
   }
 
   header nav ul {
@@ -333,12 +454,12 @@ footer {
   }
 
   .productos {
-    justify-content: center;
+    justify-self: center;
   }
 
   .producto {
     max-width: 400px;
-    align-items: center;
+    /* align-items: center;
 
     & h2 {
       text-align: center;
@@ -346,7 +467,16 @@ footer {
 
     & h3 {
       text-align: center;
-    }
+    } */
+  }
+
+  .modal {
+    min-width: auto;
+  }
+
+  .modal-card {
+    min-width: 400px;
+    border-radius: 20px;
   }
 
   .reseñas {
