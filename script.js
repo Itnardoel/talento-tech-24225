@@ -163,21 +163,32 @@ function addToCart(event, coffeeToAdd) {
 
   if (coffeeFoundInStorage && coffeeFoundInStorage.quantity < 9) {
     coffeeFoundInStorage.quantity++
+
+    Toastify({
+      text: `Añadiste ${coffeeToAdd.name} al carrito`,
+      gravity: "bottom",
+      position: "right",
+      style: {
+        background: "linear-gradient(to right, #00b09b, #96c93d)",
+      },
+      duration: 3000
+      }).showToast();
+
   } else if (!coffeeFoundInStorage) {
     storagedCart.push({ ...coffeeToAdd, quantity: 1 })
+
+    Toastify({
+      text: `Añadiste ${coffeeToAdd.name} al carrito`,
+      gravity: "bottom",
+      position: "right",
+      style: {
+        background: "linear-gradient(to right, #00b09b, #96c93d)",
+      },
+      duration: 3000
+      }).showToast();
   }
 
   localStorage.setItem('cart', JSON.stringify(storagedCart))
-
-  Toastify({
-    text: `Añadiste ${coffeeToAdd.name} al carrito`,
-    gravity: "bottom",
-    position: "right",
-    style: {
-      background: "linear-gradient(to right, #00b09b, #96c93d)",
-    },
-    duration: 3000
-    }).showToast();
 
   getCart()
 }
