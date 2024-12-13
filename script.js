@@ -1,4 +1,4 @@
-// Form submit event
+// FORM SUBMIT EVENTS
 
 const $form = document.querySelector('form')
 // const $name = document.getElementById('name')
@@ -106,9 +106,11 @@ function getCart() {
   if (cart.length > 0) {
     let totalCount = 0
 
-    cart.forEach(({stock}) => totalCount += stock)
+    cart.forEach(({quantity}) => totalCount += quantity)
 
     cartCounter.textContent = totalCount
+  } else {
+    cartCounter.textContent = ''
   }
 
   updateModalCart(cart)
@@ -122,15 +124,52 @@ function addToCart(event, coffeeToAdd) {
   const coffeeFoundInStorage = storagedCart.find(coffee => coffee.id === coffeeToAdd.id)
 
   if (coffeeFoundInStorage) {
-    coffeeFoundInStorage.stock ++ 
+    coffeeFoundInStorage.quantity ++ 
   } else {
-    storagedCart.push({...coffeeToAdd, stock: 1})
+    storagedCart.push({...coffeeToAdd, quantity: 1})
   }
   
   localStorage.setItem("cart", JSON.stringify(storagedCart))
 
   console.log("Producto añadido al carrito")
   
+  getCart()
+}
+
+function deleteFromCart(event, coffeeToRemove) {
+  event.stopPropagation()
+
+  const storagedCart = JSON.parse(localStorage.getItem("cart")) || []
+
+  const filteredCart = storagedCart.filter(coffee => coffee.id !== coffeeToRemove.id)
+
+  localStorage.setItem("cart", JSON.stringify(filteredCart))
+
+  console.log("Producto eliminado del carrito");
+  
+  updateModalCart(filteredCart)
+
+  getCart()
+}
+
+function changeQuantity(event, coffeeToChange) {
+  event.stopPropagation()
+
+  const operation = event.target.innerText
+  const storagedCart = JSON.parse(localStorage.getItem("cart")) || []
+  
+  const coffeeFoundInStorage = storagedCart.find(coffee => coffee.id === coffeeToChange.id)
+
+  if (operation === '-' && coffeeFoundInStorage.quantity > 1) {
+    coffeeFoundInStorage.quantity --
+  } 
+
+  if (operation === '+' && coffeeFoundInStorage.quantity < 9) {
+    coffeeFoundInStorage.quantity ++
+  }
+
+  localStorage.setItem("cart", JSON.stringify(storagedCart))
+
   getCart()
 }
 
@@ -150,6 +189,10 @@ function updateModalCart(cart) {
   } else {
     $cart.firstElementChild.innerHTML =`
                                     <svg id="close-button-cart" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
+                                    <div style="display: flex; justify-content: space-around;">
+                                      <h3>Producto</h3>
+                                      <h3>Subtotal</h3>
+                                    </div>
     `
 
     const $closeButtonCart = document.getElementById('close-button-cart')
@@ -157,8 +200,12 @@ function updateModalCart(cart) {
 
     const $modalCart = document.querySelector('.modal-cart')
     $modalCart.addEventListener("click", (event) => event.stopPropagation())
+
+    let totalCartPrice = 0
+
     cart.forEach(coffee => {
-      
+      totalCartPrice += coffee.price * coffee.quantity
+
       const $product = document.createElement('div')
 
       $product.classList.add('cart-item')
@@ -169,20 +216,55 @@ function updateModalCart(cart) {
                             <h3 style="color: rgb(0 0 0 / 60%); margin-bottom: 8px">${coffee.name}</h3>
                             <div style="display: flex;">
                               <button style="padding: 4px 8px; border-radius: 6px 0 0 6px; cursor: pointer;">-</button>
-                              <p style="padding: 4px 8px; border-top: 2px solid #000; border-bottom: 2px solid #000;">${coffee.stock}</p>
+                              <p style="padding: 4px 8px; border-top: 2px solid #000; border-bottom: 2px solid #000;">${coffee.quantity}</p>
                               <button style="padding: 4px 8px; border-radius: 0 6px 6px 0; cursor: pointer;">+</button>
                             </div>
                           </div>
-                          <p style="flex: 1; font-weight: bold; text-align: center;">${(coffee.price * coffee.stock).toLocaleString('es-AR', { style: 'currency', currency: 'ARS'})}</p>
+                          <p style="flex: 1; font-weight: bold; text-align: center;">${(coffee.price * coffee.quantity).toLocaleString('es-AR', { style: 'currency', currency: 'ARS'})}</p>
                           <svg style="flex: 1; cursor: pointer;" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg>
       `
 
       $modalCart.appendChild($product)
+
+      const $minusButton = $product.querySelectorAll('button')[0]      
+      $minusButton.addEventListener("click", (event) => changeQuantity(event, coffee))
+      
+      const $plusButton = $product.querySelectorAll('button')[1]
+      $plusButton.addEventListener("click", (event) => changeQuantity(event, coffee))
+
+      const $deleteButton = $product.querySelector('svg')
+      $deleteButton.addEventListener("click", (event) => deleteFromCart(event, coffee))
+    })
+
+    const $total = document.createElement('div')
+
+    $total.classList.add('cart-total')
+
+    $total.innerHTML = `
+                      <h2>Total: ${totalCartPrice.toLocaleString('es-AR', { style: 'currency', currency: 'ARS'})}</h2>
+                      <h5 style="margin-bottom: 16px;">O hasta 12 cuotas de ${(totalCartPrice/12).toLocaleString('es-AR', { style: 'currency', currency: 'ARS'})}</h5>
+                      <button>Realizar Compra</button>
+    `
+
+    $modalCart.appendChild($total)
+
+    const $buyButton = $total.querySelector("button")
+    $buyButton.addEventListener("click", () => {
+      Swal.fire({
+        title: "Compra realizada",
+        text: `Realizaste la compra por el monto total de ${totalCartPrice.toLocaleString('es-AR', { style: 'currency', currency: 'ARS'})}`,
+        icon: "success",
+        confirmButtonText: "Aceptar"
+      });
+
+      localStorage.removeItem('cart')
+      document.getElementById('cart').classList.remove('show-cart')
+      getCart()
     })
   }
 }
 
-// NAV Events
+// NAV EVENTS
 
 // MOBILE MENU OPEN EVENT
 const $menuButton = document.getElementById('mobile-menu-button')

@@ -347,6 +347,18 @@ section > h2 {
   }
 }
 
+.cart-total {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding: 0 40px;
+
+  & button {
+    align-self: center;
+    margin-bottom: 16px;
+  }
+}
+
 .reseñas {
   font-family: "Ubuntu", serif;
   max-width: 1280px;
