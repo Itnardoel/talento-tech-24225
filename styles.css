@@ -108,8 +108,9 @@ header nav {
   }
 }
 
-.cart {
+.cart-icon {
   position: relative;
+  cursor: pointer;
 
   & svg {
     width: 45px;
@@ -266,7 +267,12 @@ section > h2 {
   place-items: center;
 }
 
-#close-button {
+.show-cart {
+  display: grid;
+  place-items: end;
+}
+
+#close-button-modal {
   cursor: pointer;
   margin: 8px;
   width: 30px;
@@ -284,6 +290,8 @@ section > h2 {
   & img {
     width: 100%;
     height: auto;
+    min-height: 276px;
+    max-height: 446.63px;
     object-fit: contain;
     align-self: center;
   }
@@ -311,6 +319,31 @@ section > h2 {
     &:hover {
       cursor: pointer;
     }
+  }
+}
+
+#close-button-cart {
+  cursor: pointer;
+  margin: 8px;
+  width: 30px;
+  height: auto;
+  place-self: start;
+}
+
+.modal-cart {
+  width: 30dvw;
+  min-width: 500px;
+  height: 100%;
+  background-color: #ffffff;
+  overflow: auto;
+}
+
+.cart-item {
+  display: flex;
+  align-items: center;
+
+  & img {
+    width: 30%;
   }
 }
 
@@ -477,6 +510,10 @@ footer {
   .modal-card {
     min-width: 400px;
     border-radius: 20px;
+  }
+
+  .modal-cart {
+    min-width: 100%;
   }
 
   .reseñas {
