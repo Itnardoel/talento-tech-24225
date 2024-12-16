@@ -12,9 +12,9 @@ function checkFormValues(event) {
     new FormData(event.target)
   )
 
-  name === '' ? $name.classList.add('error-input') : $name.classList.add('correct-input')
-  email === '' ? $email.classList.add('error-input') : $email.classList.add('correct-input')
-  message === '' ? $message.classList.add('error-input') : $message.classList.add('correct-input')
+  name === '' ? ($name.classList.add('error-input'), $name.classList.remove('correct-input')) : $name.classList.add('correct-input')
+  email === '' ? ($email.classList.add('error-input'), $email.classList.remove('correct-input')) : $email.classList.add('correct-input')
+  message === '' ? ($message.classList.add('error-input'), $message.classList.remove('correct-input')) : $message.classList.add('correct-input')
 
   if (!name || !email || !message) {
     console.log('Campos del formulario sin completar')
@@ -28,6 +28,7 @@ function checkFormValues(event) {
       },
       duration: 3000
       }).showToast();
+      
     return
   }
 
